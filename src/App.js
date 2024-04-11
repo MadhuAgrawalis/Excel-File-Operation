@@ -1,25 +1,33 @@
-import {useState} from 'react'
-import About from './About'
+import {useState,useEffect} from 'react'
+import {About} from './About'
 import {Data} from './Components/Data'
 import {IndividualData} from './Components/IndividualData';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 import * as XLSX  from 'xlsx'
+
+
+
 
 
 function App() {
 
 
-//on change states
+
   const [excelFile, setExcelFile]=useState(null);
   const [excelFileError, setExcelFileError]=useState(null);
 console.log(excelFile);
 
-//submit
+
+
+
+
+
 const [excelData, setExcelData]=useState(null);
 
 
-//habdle file
-const fileType=['application/vnd.ms-excel','KYC LISTFEB.xlsx','Madhu.xlsx']
+
+const fileType=['application/vnd.ms-excel']
 const handleFile = (e)=>{
   let selectedFile = e.target.files[0];
   if (selectedFile){
@@ -28,6 +36,7 @@ const handleFile = (e)=>{
     let reader = new FileReader();
     reader.readAsArrayBuffer(selectedFile);
     reader.onload=(e)=>{
+     
       setExcelFileError(null);
       setExcelFile(e.target.result);
 
@@ -52,6 +61,7 @@ const worksheetName = workbook.SheetNames[0];
 const worksheet = workbook.Sheets[worksheetName];
 const data = XLSX.utils.sheet_to_json(worksheet);
 setExcelData(data);
+
   }
   else{
     setExcelData(null);
@@ -100,14 +110,14 @@ Submit
   </tr>
 </thead>
 <tbody>
-  <Data excelData={excelData}/>
+  {/* <Data excelData={excelData}/> */}
 </tbody>
 
 </table>
 </div>
 
 )}
-  {/* <About/> */}
+   {excelData ? < About excelData={excelData} /> : ""}
 
   </div>  
 </div>
